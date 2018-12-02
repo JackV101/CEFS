@@ -1,5 +1,6 @@
 import apisHelp
 import emailHelp
+import sheetsHelp
 
 SPREADSHEET_ID = '1qEqy6Kzv0SOxZT6f_-mvhOaJKo-MQYFgA5A_1KyayPo'
 RANGE = 'A2:D'
@@ -8,9 +9,7 @@ calService = apisHelp.getCalendarService()
 mailService = apisHelp.getGmailService()
 sheetsService = apisHelp.getSheetsService()
 
-result = sheetsService.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range=RANGE).execute()
-
-values = result.get('values', [])
+values = sheetsHelp.getSheetsData(SPREADSHEET_ID,RANGE, sheetsService)
 
 if not values:
 	print('No data found.')
