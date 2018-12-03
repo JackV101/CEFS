@@ -6,7 +6,7 @@ import datetime
 from time import localtime, gmtime
 from calendar import timegm
 
-SCOPES = "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/spreadsheets.readonly"
+SCOPES = "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/spreadsheets"
 
 def getCalendarService():
     store = file.Storage('token.json')

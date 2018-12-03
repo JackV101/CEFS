@@ -15,7 +15,7 @@ def fetchSheetsData(service, spreadsheetID = '1qEqy6Kzv0SOxZT6f_-mvhOaJKo-MQYFgA
 # if the result is not cached and service is provided it will be requested from google
 # if the result is not cached and service is not provided or is None then None will be returned
 # USE fetchSheetsData to refresh the cache for a sheet and range
-def getSheetsData(spreadsheetID='1qEqy6Kzv0SOxZT6f_-mvhOaJKo-MQYFgA5A_1KyayPo', range = 'A2:D', service = None):
+def getSheetsData(spreadsheetID='1qEqy6Kzv0SOxZT6f_-mvhOaJKo-MQYFgA5A_1KyayPo', range = 'A2:E', service = None):
 	cache_key = getDictionaryKey(spreadsheetID, range)
 	#If service == None then dont attempt to fetch sheets data
 	if service is not None:

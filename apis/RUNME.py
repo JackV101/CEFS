@@ -3,7 +3,7 @@ import emailHelp
 import sheetsHelp
 
 SPREADSHEET_ID = '1qEqy6Kzv0SOxZT6f_-mvhOaJKo-MQYFgA5A_1KyayPo'
-RANGE = 'A2:D'
+RANGE = 'A2:E'
 
 calService = apisHelp.getCalendarService()
 mailService = apisHelp.getGmailService()
