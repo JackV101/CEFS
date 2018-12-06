@@ -62,8 +62,6 @@ def createEvent(summary,start,end,service,description = "",location = '',clid = 
 		'dateTime': end,
 	},
 	}
-	print(start)
-	print(end)
 	event = service.events().insert(calendarId='primary', body=event).execute()
 	print('Event created: ' + event.get('htmlLink'))
 	return event
