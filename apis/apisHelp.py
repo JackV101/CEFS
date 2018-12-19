@@ -6,7 +6,7 @@ import datetime
 from time import localtime, gmtime
 from calendar import timegm
 
-SCOPES = "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/spreadsheets"
+SCOPES = "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/calendar.readonly"
 
 def getCalendarService():
     store = file.Storage('token.json')
@@ -62,8 +62,8 @@ def createEvent(summary,start,end,service,description = "",location = '',clid = 
 		'dateTime': end,
 	},
 	}
-	event = service.events().insert(calendarId='primary', body=event).execute()
-	print('Event created: ' + event.get('htmlLink'))
+	event = service.events().insert(calendarId=clid, body=event).execute()
+	print('Event created on ' + service.calendars().get(calendarId=clid).execute()['summary'] + ': ' + event.get('htmlLink'))
 	return event
 
 def getTimeZoneOffset():
