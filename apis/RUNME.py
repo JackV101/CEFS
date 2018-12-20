@@ -28,8 +28,10 @@ else:
 		end = row[2]
 		email = row[3]
 		if len(row) >= 5 and processed_column != 4 and row[4]:
-			apisHelp.createEvent(summary,start,end,calService, '', '', row[4])
+			if not apisHelp.createEvent(summary,start,end,calService, '', '', row[4]):
+				continue
 		else:
-			apisHelp.createEvent(summary,start,end,calService)
+			if not apisHelp.createEvent(summary,start,end,calService):
+				continue
 		emailHelp.SendMessage(mailService, 'me', emailHelp.CreateMessage(email, "CEFS Email", summary))
 		sheetsHelp.setProcessed(sheetsService, offset, RANGE, SPREADSHEET_ID)

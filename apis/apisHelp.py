@@ -46,7 +46,20 @@ def calTest(num,service,clid = 'vtm77ugv7jqrdmk4fos7aa5dg4@group.calendar.google
         print(start, event['summary'])
 
 def createEvent(summary,start,end,service,description = "",location = '',clid = 'vtm77ugv7jqrdmk4fos7aa5dg4@group.calendar.google.com'):
-    # Add time zone offset if it is missing
+    
+	# Check for access before continueing
+	testId = checkCalendarAccess(service, clid)
+	if not testId:
+		# no calendar with the Id. Check if its a name
+		testId = checkCalendarAccess(service, clid, True)
+		if type(testId) == type(""):
+			#found as name
+			clid = testId
+		else:
+			print("Dont have access to calendar: " + clid)
+			return None
+	
+	# Add time zone offset if it is missing
 	if len(start) == 19:
 		start += getTimeZoneOffset()
 	if len(end) == 19:
@@ -67,7 +80,7 @@ def createEvent(summary,start,end,service,description = "",location = '',clid = 
 	return event
 
 def getTimeZoneOffset():
-	"""Get current time zone offset.
+	""" Get current time zone offset.
 	Returns:
 		A timezone offset string formated in accordance with RFC 3339.
 	"""
@@ -88,3 +101,28 @@ def getTimeZoneOffset():
 		sOffset += "0"
 	sOffset += str(iMinuteOffset)
 	return sOffset
+def checkCalendarAccess(service, calId, is_name=False):
+	""" Check if user has access to calendar
+	service - calendar service object received with getCalendarService
+	calId - string - calendar Id or calendar name to check for access
+	is_name - boolean - if true the calId is actually a name not a calender Id
+	
+	If not calId - Returns true if user has access
+	If calId - Returns calId if user has access
+	Otherwise - Returns False
+	"""
+	page_token = None
+	while True:
+		calendar_list = service.calendarList().list(pageToken=page_token).execute()
+		for calendar_list_entry in calendar_list['items']:
+			if is_name and calendar_list_entry['summary'] == calId:
+				# Return the id of the calendar which matches the requested name and the user has access to
+				return calendar_list_entry['id']
+			elif not is_name and calendar_list_entry['id'] == calId:
+				# The user has access to the requested calendar
+				return True
+		page_token = calendar_list.get('nextPageToken')
+		if not page_token:
+			break
+	# Could not find the requested calendar in the users calendars
+	return False
