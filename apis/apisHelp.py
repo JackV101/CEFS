@@ -59,11 +59,9 @@ def createEvent(summary,start,end,service,description = "",location = '',clid = 
 			print("Dont have access to calendar: " + clid)
 			return None
 	
-	# Add time zone offset if it is missing
-	if len(start) == 19:
-		start += getTimeZoneOffset()
-	if len(end) == 19:
-		end += getTimeZoneOffset()
+	start = fixTime(start)
+	end = fixTime(end)
+	
 	event = {
 	'summary': summary,
 	'location': location,
@@ -78,6 +76,19 @@ def createEvent(summary,start,end,service,description = "",location = '',clid = 
 	event = service.events().insert(calendarId=clid, body=event).execute()
 	print('Event created on ' + service.calendars().get(calendarId=clid).execute()['summary'] + ': ' + event.get('htmlLink'))
 	return event
+
+def fixTime(time):
+	if "-" not in time:
+		time = datetime.datetime.today().strftime('%Y-%m-%d')
+	if "T" not in time:
+		time += "T"
+	while len(time[time.index("T"):]) < 9:
+		if time[-2:].isdigit():
+			time += ":"
+		time += "0"
+	if len(time) == 19:
+		time += getTimeZoneOffset()
+	return time
 
 def getTimeZoneOffset():
 	""" Get current time zone offset.
@@ -126,3 +137,6 @@ def checkCalendarAccess(service, calId, is_name=False):
 			break
 	# Could not find the requested calendar in the users calendars
 	return False
+
+# Test Code
+print(fixTime("2019-"))
