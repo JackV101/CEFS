@@ -45,6 +45,9 @@ def calTest(num,service,clid = 'vtm77ugv7jqrdmk4fos7aa5dg4@group.calendar.google
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
 
+def createCalendarEvent(summary,date,start_time,end_time,service,description = "",location = '',clid = 'vtm77ugv7jqrdmk4fos7aa5dg4@group.calendar.google.com'):
+	return createEvent(summary,date +"T"+start_time,date +"T"+end_time,service,description,location,clid)
+
 def createEvent(summary,start,end,service,description = "",location = '',clid = 'vtm77ugv7jqrdmk4fos7aa5dg4@group.calendar.google.com'):
     
 	# Check for access before continueing
@@ -112,6 +115,7 @@ def getTimeZoneOffset():
 		sOffset += "0"
 	sOffset += str(iMinuteOffset)
 	return sOffset
+
 def checkCalendarAccess(service, calId, is_name=False):
 	""" Check if user has access to calendar
 	service - calendar service object received with getCalendarService
@@ -137,6 +141,3 @@ def checkCalendarAccess(service, calId, is_name=False):
 			break
 	# Could not find the requested calendar in the users calendars
 	return False
-
-# Test Code
-print(fixTime("2019-"))
