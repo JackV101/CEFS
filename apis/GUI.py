@@ -25,6 +25,8 @@ class popup:
 		return self.popupMenu
 	
 	def see(self,value):
+		if self.state != value:
+			schoolC.op.set(schoolTitle)
 		self.state = value
 		if(self.seq is studentTypes):
 			if(self.state == typeTitle):
@@ -36,7 +38,6 @@ class popup:
 			schoolC.updateList()
 	
 	def updateList(self):
-		self.op.set(schoolTitle)
 		menu = self.popupMenu['menu']
 		# Clear the menu.
 		menu.delete(0, 'end')
@@ -61,12 +62,12 @@ studentTypes = ["7/8","IND","JB","JG","RUN","SB","SG","VAR"]
 typeTitle = "Type"
 schoolTitle = "School"
 
-typeC = popup(studentTypes,typeTitle,2,1)
+typeC = popup(studentTypes,typeTitle,1,1)
 if typeC.state == typeTitle:
-    schoolC = popup([""],schoolTitle,1,1)
+    schoolC = popup([""],schoolTitle,2,1)
 elif typeC.state == "7/8":
-    schoolC = popup(schools78,schoolTitle,1,1)
+    schoolC = popup(schools78,schoolTitle,2,1)
 else:
-    schoolC = popup(schools,schoolTitle,1,1)
+    schoolC = popup(schools,schoolTitle,2,1)
 
 window.mainloop()
