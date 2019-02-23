@@ -1,0 +1,8 @@
+78
+JG
+JB
+SG
+SB
+IND
+RUN
+VAR

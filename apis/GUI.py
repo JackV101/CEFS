@@ -27,15 +27,27 @@ class popup:
 	def see(self,value):
 		if self.state != value:
 			schoolC.op.set(schoolTitle)
+			sportC.op.set(sportTitle)
 		self.state = value
 		if(self.seq is studentTypes):
 			if(self.state == typeTitle):
 				schoolC.seq = [""]
-			elif self.state == "7/8":
+				sportC.seq = [""]
+			elif self.state == "78":
 				schoolC.seq = schools78
+				sportC.seq = loadSettingsFromFile("78sports.txt")
 			else:
 				schoolC.seq = schools
+			if(self.state == "IND"):
+				sportC.seq = loadSettingsFromFile("INDsports.txt")
+			elif self.state == "RUN":
+				sportC.seq = loadSettingsFromFile("RUNsports.txt")
+			elif self.state == "VAR":
+				sportC.seq = loadSettingsFromFile("VARsports.txt")
+			elif self.state != "78":
+				sportC.seq = loadSettingsFromFile("sports.txt")
 			schoolC.updateList()
+			sportC.updateList()
 	
 	def updateList(self):
 		menu = self.popupMenu['menu']
@@ -44,6 +56,11 @@ class popup:
 		for name in self.seq:
 			# Add menu items.
 			menu.add_command(label=name, command=lambda name=name: self.op.set(name))
+
+def loadSettingsFromFile(fileName):
+	if not fileName.endswith(".txt"):
+		fileName += ".txt"
+	return list(map(str, open("../settings/"+fileName).read().split("\n")))
 
 #Create Window
 window = Tk()
@@ -55,19 +72,25 @@ Exit = Button(window,text="Exit",command=exitMe)
 Exit.grid(row=10,column=10)
 
 #Drop Down Variables
-schools = ["Monsignor Doyle CSS","Our Lady of Mt Carmel","Pere-Rene-de-Galinee","Ressurrection CSS","Rockway MC","St. Benedict","St. David CSS","St. Mary's HS","Woodland CHS"]
-schools78 = ["Blessed Sacrament","Canadian Martyrs","John Sweeny","Rockway MC","St Anne","St Daniel","St John Paul II","St Kareri Tekawitha"]
-studentTypes = ["7/8","IND","JB","JG","RUN","SB","SG","VAR"]
+
+schools = loadSettingsFromFile("schools.txt")
+schools78 = loadSettingsFromFile("78Schools.txt")
+
+studentTypes = loadSettingsFromFile("sportTypes.txt")
 
 typeTitle = "Type"
 schoolTitle = "School"
+sportTitle = "Sport"
 
 typeC = popup(studentTypes,typeTitle,1,1)
+
+sportC = popup([""],sportTitle,2,1)
+
 if typeC.state == typeTitle:
-    schoolC = popup([""],schoolTitle,2,1)
-elif typeC.state == "7/8":
-    schoolC = popup(schools78,schoolTitle,2,1)
+    schoolC = popup([""],schoolTitle,3,1)
+elif typeC.state == "78":
+    schoolC = popup(schools78,schoolTitle,3,1)
 else:
-    schoolC = popup(schools,schoolTitle,2,1)
+    schoolC = popup(schools,schoolTitle,3,1)
 
 window.mainloop()
