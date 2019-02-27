@@ -1,8 +1,10 @@
-78
-JG
-JB
-SG
-SB
-IND
-RUN
-VAR
+78 Boys
+78 Girls
+78 Individual
+Junior Girls
+Junior Boys
+Senior Girls
+Senior Boys
+Individual
+Running
+Varsity

@@ -6,6 +6,8 @@ try:
 except ImportError:
 	from Tkinter import *
 import time
+# New Config Manager for handling our settings by using ini files
+import ConfigManager
 
 def exitMe():
     exit()
@@ -21,8 +23,16 @@ class popup:
 		self.op = StringVar(window)
 		self.op.set(option)
 		self.popupMenu = OptionMenu(window, self.op, *self.seq, command=self.see)
-		self.popupMenu.grid(row=y,column=x)
+		self.x = x
+		self.y = y
+		self.show()
 		return self.popupMenu
+	
+	def show(self):
+		self.popupMenu.grid(row=self.y,column=self.x)
+	
+	def hide(self):
+		self.popupMenu.grid_remove()
 	
 	def see(self,value):
 		if self.state != value:
@@ -33,22 +43,12 @@ class popup:
 			if(self.state == typeTitle):
 				schoolC.seq = [""]
 				sportC.seq = [""]
-			elif self.state == "78":
-				schoolC.seq = schools78
-				sportC.seq = loadSettingsFromFile("78sports.txt")
 			else:
-				schoolC.seq = schools
-			if(self.state == "IND"):
-				sportC.seq = loadSettingsFromFile("INDsports.txt")
-			elif self.state == "RUN":
-				sportC.seq = loadSettingsFromFile("RUNsports.txt")
-			elif self.state == "VAR":
-				sportC.seq = loadSettingsFromFile("VARsports.txt")
-			elif self.state != "78":
-				sportC.seq = loadSettingsFromFile("sports.txt")
+				schoolC.seq = ConfigManager.getProperty(ConfigManager.getTypes()[self.state],"schools", True)
+				sportC.seq = ConfigManager.getProperty(ConfigManager.getTypes()[self.state],"sports", True)
 			schoolC.updateList()
 			sportC.updateList()
-	
+
 	def updateList(self):
 		menu = self.popupMenu['menu']
 		# Clear the menu.
@@ -73,24 +73,14 @@ Exit.grid(row=10,column=10)
 
 #Drop Down Variables
 
-schools = loadSettingsFromFile("schools.txt")
-schools78 = loadSettingsFromFile("78Schools.txt")
-
-studentTypes = loadSettingsFromFile("sportTypes.txt")
+studentTypes = ConfigManager.getTypes()
 
 typeTitle = "Type"
 schoolTitle = "School"
 sportTitle = "Sport"
 
 typeC = popup(studentTypes,typeTitle,1,1)
-
 sportC = popup([""],sportTitle,2,1)
-
-if typeC.state == typeTitle:
-    schoolC = popup([""],schoolTitle,3,1)
-elif typeC.state == "78":
-    schoolC = popup(schools78,schoolTitle,3,1)
-else:
-    schoolC = popup(schools,schoolTitle,3,1)
+schoolC = popup([""],schoolTitle,3,1)
 
 window.mainloop()
