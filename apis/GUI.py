@@ -73,7 +73,7 @@ Exit.grid(row=10,column=10)
 
 #Drop Down Variables
 
-studentTypes = ConfigManager.getTypes()
+studentTypes = sorted(ConfigManager.getTypes().keys())
 
 typeTitle = "Type"
 schoolTitle = "School"
