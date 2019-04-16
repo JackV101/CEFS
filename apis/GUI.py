@@ -6,6 +6,8 @@ try:
 except ImportError:
 	from Tkinter import *
 import time
+import tkcalendar
+import tkSimpleDialog
 # New Config Manager for handling our settings by using ini files
 import ConfigManager
 
@@ -57,10 +59,19 @@ class popup:
 			# Add menu items.
 			menu.add_command(label=name, command=lambda name=name: self.op.set(name))
 
-def loadSettingsFromFile(fileName):
-	if not fileName.endswith(".txt"):
-		fileName += ".txt"
-	return list(map(str, open("../settings/"+fileName).read().split("\n")))
+class CalendarDialog(tkSimpleDialog.Dialog):
+    """Dialog box that displays a calendar and returns the selected date"""
+    def body(self, master):
+        self.calendar = tkcalendar.Calendar(master)
+        self.calendar.pack()
+
+    def apply(self):
+        self.result = self.calendar.selection_get()
+
+def onclick():
+    cd = CalendarDialog(window)
+    date.config(text="Date: "+cd.result.strftime("%Y-%m-%d"))
+    print cd.result
 
 #Create Window
 window = Tk()
@@ -69,7 +80,7 @@ window.geometry("400x400")
 
 #Button
 Exit = Button(window,text="Exit",command=exitMe)
-Exit.grid(row=10,column=10)
+Exit.grid(row=10,column=1)
 
 #Drop Down Variables
 
@@ -82,5 +93,8 @@ sportTitle = "Sport"
 typeC = popup(studentTypes,typeTitle,1,1)
 sportC = popup([""],sportTitle,2,1)
 schoolC = popup([""],schoolTitle,3,1)
+
+date = Button(window, text="Date", command=onclick)
+date.grid(row=1,column=4)
 
 window.mainloop()

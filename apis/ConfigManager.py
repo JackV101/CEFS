@@ -10,12 +10,20 @@ def save():
 
 def getProperty(section, property, asList = False):
 	if fallback:
-		#TODO Implement fallback
-		return None
+		if section.startswith("78"):
+			return loadSettingsFromFile("78"+property+".txt")
+		elif(self.state == "IND"):
+			return loadSettingsFromFile("IND"+property+".txt")
+		elif self.state == "RUN":
+			return loadSettingsFromFile("RUN"+property+".txt")
+		elif self.state == "VAR":
+			return loadSettingsFromFile("VAR"+property+".txt")
+		else:
+			return loadSettingsFromFile(property+".txt")
 	if __config__.has_section(section):
 		if __config__.has_option(section,property):
 			value = __config__.get(section, property)
-		elif __config__.has_option(section,"parent") and __config__.has_option(__config__.get(section,"parent"),property):
+		elif section != "noSection" and __config__.has_option(section,"parent") and __config__.has_option(__config__.get(section,"parent"),property):
 			value = __config__.get(__config__.get(section,"parent"), property)
 		else:
 			value = None
@@ -39,13 +47,13 @@ def deleteType(section):
 	save()
 	return result
 
-def getTypes():
+def getTypes(includeNoSection=False):
 	if fallback:
 		# For some reason we failed to load our saved settings. Return a default list instead
 		return ["78 Girls","78 Boys","78 Individual","Junior Girls","Junior Boys","Senior Girls","Senior Boys","Individual","Running","Varsity"]
 	types = {}
 	for section in __config__.sections():
-		if __config__.has_option(section,"noSection"):
+		if not includeNoSection and __config__.has_option(section,"noSection"):
 			continue
 		if __config__.has_option(section,"name"):
 			types[__config__.get(section,"name")] = section
